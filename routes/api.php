@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+// use App\Http\Controllers\Patients\RvdMaladeController;
+
 
 
 /*
@@ -429,6 +431,33 @@ Route::group(['namespace'   =>  "Backend"], function(){
     
     Route::get("checkEtat_texto/{id}/{phone}/{etat}", 'TextoController@checkEtat_texto');
     
+
+
+    
+});
+
+Route::group(['namespace'   =>  "Patients"], function(){
+    Route::get("fetch_rdv_malade", 'RvdMaladeController@index');
+    Route::get("showRDV_Carte/{refCarte}", 'RvdMaladeController@showRDV_Carte');
+    Route::get("fetch_single_rdv_malade/{id}", 'RvdMaladeController@edit');    
+    Route::post("insert_rdv_malade", 'RvdMaladeController@insertData');
+    Route::post("update_rdv_malade", 'RvdMaladeController@updateData');
+    Route::get("delete_rdv_malade/{id}", 'RvdMaladeController@destroy'); 
+    
+    
+    Route::get("fetch_carte_malade", 'CarteController@index');
+    Route::get("fetch_single_carte_malade/{id}", 'CarteController@edit');    
+    Route::post("insert_carte_malade", 'CarteController@insertData');
+    Route::post("update_carte_malade", 'CarteController@updateData');
+    Route::get("delete_carte_malade/{id}", 'CarteController@destroy'); 
+
+
+    Route::get("fetch_data_malade", 'DataMaladeController@index');
+    Route::get("showData_Carte/{refCarte}", 'DataMaladeController@showData_Carte');
+    Route::get("fetch_single_data_malade/{id}", 'DataMaladeController@edit');    
+    Route::post("insert_data_malade", 'DataMaladeController@insertData');
+    Route::post("update_data_malade", 'DataMaladeController@updateData');
+    Route::get("delete_data_malade/{id}", 'DataMaladeController@destroy'); 
 
 
     
