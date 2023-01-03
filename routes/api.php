@@ -446,7 +446,8 @@ Route::group(['namespace'   =>  "Patients"], function(){
     
     
     Route::get("fetch_carte_malade", 'CarteController@index');
-    Route::get("fetch_single_carte_malade/{id}", 'CarteController@edit');    
+    Route::get("fetch_single_carte_malade/{id}", 'CarteController@edit');   
+    Route::get("carte_by_user/{refUser}", 'CarteController@carte_by_user');  
     Route::post("insert_carte_malade", 'CarteController@insertData');
     Route::post("update_carte_malade", 'CarteController@updateData');
     Route::get("delete_carte_malade/{id}", 'CarteController@destroy'); 

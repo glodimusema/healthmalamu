@@ -80,6 +80,18 @@ class CarteController extends Controller
         return response()->json(['data'    =>  $data]);
     }
 
+    public function carte_by_user($refUser)
+    {
+        //
+        $data = DB::table("tcarte")
+        ->join('users','users.id','=','tcarte.refUser') 
+        ->select('tcarte.id','refUser','name,email,telephone,adresse,sexe,avatar')
+        ->where('tcarte.refUser', $refUser)
+        ->get();
+
+        return response()->json(['data'    =>  $data]);
+    }
+
    
 
     /**
