@@ -64,6 +64,43 @@ class ConnexionController extends Controller
              
     }
 
+    function fetch_login_patient(Request $request)
+    {
+        if (($request->get('numeroCarte')) && ($request->get('codeSecret'))) 
+        {
+          
+            $data = DB::table("tcarte")       
+            ->select('tcarte.id','refUser','dateExpiration','numeroCarte','codeSecret','noms_profil','adresse_profil',
+            'telephone_profil','datenaissance_profil','groupesanguin','photo_profil','created_at','updated_at')
+            ->selectRaw('TIMESTAMPDIFF(YEAR, datenaissance_profil, CURDATE()) as age_profil')
+            ->where([               
+                ['numeroCarte','=', $request->numeroCarte],
+                ['codeSecret','=', $request->codeSecret]
+            ])     
+            ->get();               
+        
+            return response()->json([
+                'data'  => $data,
+            ]);
+                       
+        }
+        else{
+
+        }       
+    }
+
+    function fetch_all_user(Request $request)
+    {
+        $data=DB::table("users")           
+        ->join('roles','users.id_role','=','roles.id')
+        ->select('users.id as user_id','users.avatar','users.name','users.email','users.id_role','roles.nom as role_name','users.sexe','users.telephone','users.adresse','users.active')
+        ->get();
+
+        return response()->json([
+            'data'  => $data,
+        ]);      
+    }
+
 
     function logout()
     {

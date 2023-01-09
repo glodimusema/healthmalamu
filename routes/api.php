@@ -458,12 +458,19 @@ Route::group(['namespace'   =>  "Patients"], function(){
     Route::get("fetch_single_data_malade/{id}", 'DataMaladeController@edit');    
     Route::post("insert_data_malade", 'DataMaladeController@insertData');
     Route::post("update_data_malade", 'DataMaladeController@updateData');
-    Route::get("delete_data_malade/{id}", 'DataMaladeController@destroy'); 
-
-
+    Route::get("delete_data_malade/{id}", 'DataMaladeController@destroy');
     
 });
 
+Route::group(['namespace'	=>	"Connexion"], function(){
+	Route::post("checkLogin", 'ConnexionController@checkLogin');
+	Route::post("register_count", 'ConnexionController@createCount');
+	Route::get("logout", 'ConnexionController@logout');
+    Route::get("fetch_login_patient", 'ConnexionController@fetch_login_patient');
+	Route::get("fetch_all_user", 'ConnexionController@fetch_all_user');
+	
+});
+//fetch_all_user
 /*
 *les scripts commencent
 *=====================

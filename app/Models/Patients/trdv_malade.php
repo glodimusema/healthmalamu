@@ -8,6 +8,6 @@ class trdv_malade extends Model
 {
     //
     protected $fillable = [
-        'id','refCarte','refUser','dateRDV','noms','contact','lieu','motif','statut','author'
+        'id','numeroCarte','refUser','dateRDV','noms','contact','lieu','motif','statut','author'
     ];
 }

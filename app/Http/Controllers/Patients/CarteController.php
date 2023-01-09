@@ -20,48 +20,120 @@ class CarteController extends Controller
     public function index(Request $request)
     {
         //
-        $data = DB::table("tcarte")
-        ->join('users','users.id','=','tcarte.refUser') 
-        ->select('tcarte.id','refUser','name,email,telephone,adresse,sexe,avatar');
+        $data = DB::table("tcarte")       
+        ->select('tcarte.id','refUser','dateExpiration','numeroCarte','codeSecret','noms_profil','adresse_profil',
+        'telephone_profil','datenaissance_profil','groupesanguin','photo_profil','created_at','updated_at');
 
         if (!is_null($request->get('query'))) {
             # code...
             $query = $this->Gquery($request);
 
-            $data->where('name', 'like', '%'.$query.'%')          
-            ->orderBy("name", "asc");
+            $data->where('noms_profil', 'like', '%'.$query.'%')          
+            ->orderBy("noms_profil", "asc");
 
             return $this->apiData($data->paginate(3));
            
 
         }
-        $data->orderBy("tcarte.dateRDV", "desc");
+        $data->orderBy("tcarte.created_at", "desc");
         return $this->apiData($data->paginate(3));
     }
 
-    
+
     function insertData(Request $request)
     {
 
-        $data = tcarte::create([           
-            'refUser'     =>  $request->refUser
-        ]);
+        if (!is_null($request->image)) 
+        {
+            $formData = json_decode($_POST['data']);
+            $imageName = time().'.'.$request->image->getClientOriginalExtension();
 
-        return $this->msgJson('Information ajoutée avec succès');
+            $request->image->move(public_path('/fichier'), $imageName);
+            tcarte::create([
+                'refUser'     =>  $formData->refUser,
+                'dateExpiration'     =>  $formData->dateExpiration,
+                'numeroCarte'     =>  $formData->numeroCarte,
+                'codeSecret'     =>  $formData->codeSecret,
+                'noms_profil'     =>  $formData->noms_profil,
+                'adresse_profil'     =>  $formData->adresse_profil,
+                'telephone_profil'     =>  $formData->telephone_profil,
+                'datenaissance_profil'     =>  $formData->datenaissance_profil,
+                'groupesanguin'     =>  $formData->groupesanguin,
+                'photo_profil'         =>  $imageName,
+            ]);
+
+            return $this->msgJson('Information ajoutée avec succès');
+
+        }
+        else{
+
+            $formData = json_decode($_POST['data']);
+            tcarte::create([
+                'refUser'     =>  $formData->refUser,
+                'dateExpiration'     =>  $formData->dateExpiration,
+                'numeroCarte'     =>  $formData->numeroCarte,
+                'codeSecret'     =>  $formData->codeSecret,
+                'noms_profil'     =>  $formData->noms_profil,
+                'adresse_profil'     =>  $formData->adresse_profil,
+                'telephone_profil'     =>  $formData->telephone_profil,
+                'datenaissance_profil'     =>  $formData->datenaissance_profil,
+                'groupesanguin'     =>  $formData->groupesanguin,
+                'photo_profil'         =>  "avatar.png"
+            ]);
+            return $this->msgJson('Information ajoutée avec succès');
+
+        }
 
     }
 
     function updateData(Request $request)
     {
 
-        $data = tcarte::where("id", $request->id)->update([
-            'refUser'     =>  $request->refUser
-        ]);
-        return response()->json(['data'  =>  "Modification avec succès!!!"]);
+        if (!is_null($request->image)) 
+        {
+            $formData = json_decode($_POST['data']);
+            $imageName = time().'.'.$request->image->getClientOriginalExtension();
 
-    }
+            $request->image->move(public_path('/fichier'), $imageName);
+           
+            tcarte::where('id',$formData->id)->update([
+                'refUser'     =>  $formData->refUser,
+                'dateExpiration'     =>  $formData->dateExpiration,
+                'numeroCarte'     =>  $formData->numeroCarte,
+                'codeSecret'     =>  $formData->codeSecret,
+                'noms_profil'     =>  $formData->noms_profil,
+                'adresse_profil'     =>  $formData->adresse_profil,
+                'telephone_profil'     =>  $formData->telephone_profil,
+                'datenaissance_profil'     =>  $formData->datenaissance_profil,
+                'groupesanguin'     =>  $formData->groupesanguin,
+                'photo_profil'         =>  $imageName,        
 
-   
+            ]);
+            return $this->msgJson('Modifcation avec succès');
+
+        }
+        else{
+
+            $formData = json_decode($_POST['data']);
+           
+
+            tcarte::where('id',$formData->id)->update([
+                'refUser'     =>  $formData->refUser,
+                'dateExpiration'     =>  $formData->dateExpiration,
+                'numeroCarte'     =>  $formData->numeroCarte,
+                'codeSecret'     =>  $formData->codeSecret,
+                'noms_profil'     =>  $formData->noms_profil,
+                'adresse_profil'     =>  $formData->adresse_profil,
+                'telephone_profil'     =>  $formData->telephone_profil,
+                'datenaissance_profil'     =>  $formData->datenaissance_profil,
+                'groupesanguin'     =>  $formData->groupesanguin,
+                'photo_profil'         =>  "avatar.png"
+            ]);
+            return $this->msgJson('Modifcation avec succès');
+
+        }
+
+    }   
     /**
      * Show the form for editing the specified resource.
      *
@@ -71,9 +143,9 @@ class CarteController extends Controller
     public function edit($id)
     {
         //
-        $data = DB::table("tcarte")
-        ->join('users','users.id','=','tcarte.refUser') 
-        ->select('tcarte.id','refUser','name,email,telephone,adresse,sexe,avatar')
+        $data = DB::table("tcarte")       
+        ->select('tcarte.id','refUser','dateExpiration','numeroCarte','codeSecret','noms_profil','adresse_profil',
+        'telephone_profil','datenaissance_profil','groupesanguin','photo_profil','created_at','updated_at')
         ->where('tcarte.id', $id)
         ->get();
 
@@ -83,9 +155,9 @@ class CarteController extends Controller
     public function carte_by_user($refUser)
     {
         //
-        $data = DB::table("tcarte")
-        ->join('users','users.id','=','tcarte.refUser') 
-        ->select('tcarte.id','refUser','name,email,telephone,adresse,sexe,avatar')
+        $data = DB::table("tcarte")       
+        ->select('tcarte.id','refUser','dateExpiration','numeroCarte','codeSecret','noms_profil','adresse_profil',
+        'telephone_profil','datenaissance_profil','groupesanguin','photo_profil','created_at','updated_at')
         ->where('tcarte.refUser', $refUser)
         ->get();
 

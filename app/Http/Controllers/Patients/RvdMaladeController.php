@@ -21,14 +21,14 @@ class RvdMaladeController extends Controller
     {
         //
         $data = DB::table("trdv_malade")
-        ->select('id','refCarte','refUser','dateRDV','noms','contact','lieu','motif','statut','author');
+        ->select('id','numeroCarte','refUser','dateRDV','noms','contact','lieu','motif','statut','author');
 
         if (!is_null($request->get('query'))) {
             # code...
             $query = $this->Gquery($request);
 
             $data->where('noms', 'like', '%'.$query.'%')
-            ->orWhere('refCarte', 'like', '%'.$query.'%')
+            ->orWhere('numeroCarte', 'like', '%'.$query.'%')
             ->orderBy("trdv_malade.dateRDV", "desc");
 
             return $this->apiData($data->paginate(3));
@@ -39,11 +39,11 @@ class RvdMaladeController extends Controller
         return $this->apiData($data->paginate(3));
     }
 
-    public function showRDV_Carte(Request $request,$refCarte)
+    public function showRDV_Carte(Request $request,$numeroCarte)
     {
         //
         $data = DB::table("trdv_malade")
-        ->select('id','refCarte','refUser','dateRDV','noms','contact','lieu','motif','statut','author');
+        ->select('id','numeroCarte','refUser','dateRDV','noms','contact','lieu','motif','statut','author');
 
         if (!is_null($request->get('query'))) {
             # code...
@@ -51,7 +51,7 @@ class RvdMaladeController extends Controller
 
             $data->where([
                 ['noms', 'like', '%'.$query.'%'],
-                ['refCarte', $refCarte]
+                ['numeroCarte', $numeroCarte]
             ])
             ->orderBy("trdv_malade.dateRDV", "desc");
 
@@ -59,20 +59,20 @@ class RvdMaladeController extends Controller
            
 
         }
-        $data->where('refCarte', $refCarte)
+        $data->where('numeroCarte', $numeroCarte)
         ->orderBy("trdv_malade.dateRDV", "desc");
         return $this->apiData($data->paginate(3));
     }
 
    
 
-   //id','refCarte','refUser','dateRDV','noms','contact','lieu','motif','statut','author'
+   //id','numeroCarte','refUser','dateRDV','noms','contact','lieu','motif','statut','author'
 
     function insertData(Request $request)
     {
 
         $data = trdv_malade::create([
-            'refCarte'      =>  $request->refCarte,
+            'numeroCarte'      =>  $request->numeroCarte,
             'refUser'     =>  $request->refUser,
             'dateRDV' =>  $request->dateRDV,
             'noms'   =>  $request->noms,
@@ -91,7 +91,7 @@ class RvdMaladeController extends Controller
     {
 
         $data = trdv_malade::where("id", $request->id)->update([
-            'refCarte'      =>  $request->refCarte,
+            'numeroCarte'      =>  $request->numeroCarte,
             'refUser'     =>  $request->refUser,
             'dateRDV' =>  $request->dateRDV,
             'noms'   =>  $request->noms,
@@ -116,7 +116,7 @@ class RvdMaladeController extends Controller
     {
         //
         $data = DB::table("trdv_malade")
-        ->select('id','refCarte','refUser','dateRDV','noms','contact','lieu','motif','statut','author')
+        ->select('id','numeroCarte','refUser','dateRDV','noms','contact','lieu','motif','statut','author')
         ->where('trdv_malade.id', $id)
         ->get();
 
